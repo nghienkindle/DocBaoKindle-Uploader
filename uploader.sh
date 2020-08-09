@@ -1,10 +1,8 @@
 #!/bin/bash
 
 # -----------------------------------------------------
-# 名称：KindleEar安装脚本
-# 作者：bookfere.com
-# 页面：https://bookfere.com/post/19.html
-# 更新：2020.04.24
+# KindleEar uploader
+# Source: bookfere.com
 # -----------------------------------------------------
 
 r_color="\033[1;91m"
@@ -43,16 +41,16 @@ parameters=(
     # more...
 )
 descriptions=(
-    "是否将图片转换为灰度？"
-    "是否为目录生成缩略图？"
-    "是否为目录添加摘要？"
-    "是否生成HTML格式目录？"
-    "是否将中文名转为拼音？"
+    "Do you want to convert the picture to grayscale?"
+    "Do you want to generate thumbnails for the catalog?"
+    "Do you want to add a summary for the catalog?"
+    "Do you want to generate an HTML format catalog?"
+    "Should the Chinese name be converted to Pinyin?"
     # more...
 )
 interrupt() {
     echo -e $1$divid_2
-    echo -e "${r_color}已中止上传"
+    echo -e "${r_color}Upload aborted"
     echo -e $divid_1
     exit 0
 }
@@ -61,13 +59,13 @@ interrupt() {
 cd ~ && clear
 trap "interrupt \"\n\"" SIGINT
 echo -e $divid_1
-echo "准备上传 KindleEar 源代码"
+echo "Ready to upload KindleEar source code"
 echo -e $divid_1
-echo -e "${w_color}来源: $source_url${e_color}"
+echo -e "${w_color}Source: $source_url${e_color}"
 echo -e $divid_2
 
 get_version() {
-    version='未知'
+    version='unknown'
     version_file=$source_path/apps/__init__.py
     if [ -f $version_file ]; then
         version=$(sed -n "s/^__Version__\ =\ '\(.*\)'/\1/p" $version_file)
@@ -76,22 +74,22 @@ get_version() {
 }
 
 clone_code() {
-    echo -e "${c_color}开始拉取 KindleEar 源代码"
+    echo -e "${c_color}Start pulling KindleEar source code"
     rm -rf $source_path && git clone $source_url
     if [ ! -d $source_path -o ! -f $config_py -o ! $app_yaml -o ! $module_worker_yaml ]; then
         echo -e $divid_2
-        echo -e "${r_color}上传过程出问题，请重新操作"
+        echo -e "${r_color}There was a problem with the upload process, please try again."
         echo -e $divid_1
         exit 0
     fi
-    echo "源代码拉取完毕，版本号：$(get_version)"
+    echo "The source code is pulled, version number: $(get_version)"
 }
 
 if [ ! -d $source_path -o ! -f $config_py -o ! $app_yaml -o ! $module_worker_yaml ]; then
     clone_code
 else
     response="y"
-    echo -n -e ${y_color}"已存在 $(get_version) 版本，重新拉取？[y/N]${e_color} "
+    echo -n -e ${y_color}"$(get_version) version already exists, pull again?[y/N]${e_color} "
     read -r response
     if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
         bak_email=$(sed -n "s/^SRC_EMAIL\ =\ \"\(.*\)\".*#.*/\1/p" $config_py)
@@ -118,38 +116,38 @@ email=$(sed -n "s/^SRC_EMAIL\ =\ \"\(.*\)\".*#.*/\1/p" $config_py)
 appid=$(sed -n "s/^DOMAIN\ =\ \"http\(\|s\):\/\/\(.*\)\.appspot\.com\/\".*#.*/\2/p" $config_py)
 
 echo -e ${e_color}$divid_1
-if [ $email = "akindleear@gmail.com" -o $appid = "kindleear" ]; then
-    echo -e "${y_color}请按提示修改 APP 的账户信息${e_color}"
+if [ $email = "nghienkindle@gmail.com" -o $appid = "baokindle" ]; then
+    echo -e "${y_color}Please follow the prompts to modify the APP configuration${e_color}"
     echo -e $divid_2
 fi
-echo -e "当前的 Gmail 为："${g_color}$email${e_color}
-echo -e "当前的 APPID 为："${g_color}$appid${e_color}
+echo -e "Gmail: "${g_color}$email${e_color}
+echo -e "APPID: "${g_color}$appid${e_color}
 
 response="y"
 if [ ! $email = "akindleear@gmail.com" -o ! $appid = "kindleear" ]; then
     echo -e $divid_2
-    echo -n -e "${y_color}是否重新修改 APP 的账户信息? [y/N]${e_color} "
+    echo -n -e "${y_color}Do you want to re-modify the configuration of the APP?[y/N]${e_color} "
     read -r response
 fi
 
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo -e $divid_2
     while true; do
-        read -r -p "请输入你的 Gmail 地址：" email
+        read -r -p "Please enter Gmail address: " email
         if [ -n "$email" ]; then
             break
         fi
         echo -e $divid_2
-        echo -e "${r_color}Gmail 不能为空，请重新输入${e_color}"
+        echo -e "${r_color}Gmail cannot be empty, please re-enter${e_color}"
         echo -e $divid_2
     done
     while true; do
-        read -r -p "请输入你的 APP ID：" appid
+        read -r -p "Please enter your APP ID: " appid
         if [ -n "$appid" ]; then
             break
         fi
         echo -e $divid_2
-        echo -e "${r_color}APP ID 不能为空，请重新输入${e_color}"
+        echo -e "${r_color}APP ID cannot be empty, please re-enter${e_color}"
         echo -e $divid_2
     done
     sed -i "s/^SRC_EMAIL\ =\ \".*\"/SRC_EMAIL\ =\ \"$email\"/g" $config_py
@@ -161,16 +159,16 @@ echo -e $divid_1
 
 
 response="N"
-echo -n -e "${y_color}是否修改其它相关配置参数？[y/N]${e_color} "
+echo -n -e "${y_color}Do you want to modify other configuration?[y/N]${e_color} "
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo -e $divid_2
     index=0
     for parameter in ${parameters[@]}; do
         old_value=$(sed -n "s/^$parameter\ =\ \(.*\)/\1/p" $config_py)
-        notice="否"; if [[ $old_value = "True" ]]; then notice="是"; fi
+        notice="no"; if [[ $old_value = "True" ]]; then notice="yes"; fi
         response="N"
-        read -r -p ${descriptions[index]}"当前（${notice}）[y/N] " response
+        read -r -p ${descriptions[index]}"current（${notice}）[y/N] " response
         if [[ $response ]]; then
             new_value="False"
             if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then new_value="True"; fi
@@ -182,16 +180,19 @@ fi
 echo -e $divid_1
 
 
-echo -n -e "${y_color}准备完毕，是否确认上传 [y/N]${e_color} "
+echo -n -e "${y_color}Preparation is completed, confirm upload [y/N]${e_color} "
 read -r response
 echo -e $divid_2
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
     trap interrupt SIGINT
-    echo -e "${c_color}正在上传，请稍候……"
+    echo -e "${c_color}Uploading, please wait..."
     gcloud app deploy $source_path/*.yaml --version=1 --quiet
     echo -e $divid_2
-    echo -e "应用访问地址：https://$appid.appspot.com"
+    echo -e "Application access address: https://$appid.appspot.com"
 else
-    echo "已放弃上传"
+    echo "Upload abandoned"
 fi
 echo -e $divid_1
+×
+Drag and Drop
+The image will be downloaded
