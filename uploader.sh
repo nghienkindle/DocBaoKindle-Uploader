@@ -195,6 +195,3 @@ else
     echo "Upload abandoned"
 fi
 echo -e $divid_1
-×
-Drag and Drop
-The image will be downloaded
