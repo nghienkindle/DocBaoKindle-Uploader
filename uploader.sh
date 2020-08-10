@@ -41,11 +41,11 @@ parameters=(
     # more...
 )
 descriptions=(
-    "Do you want to convert the picture to grayscale?"
-    "Do you want to generate thumbnails for the catalog?"
-    "Do you want to add a summary for the catalog?"
-    "Do you want to generate an HTML format catalog?"
-    "Should the Chinese name be converted to Pinyin?"
+    "Do_you_want_to_convert_the picture_to_grayscale?"
+    "Do_you_want_to_generate_thumbnails_for_the_catalog?"
+    "Do_you_want_to_add_a_summary_for_the_catalog?"
+    "Do_you_want_to_to generate_an_HTML_format_catalog?"
+    "Should_the_Chinese_name_be_converted_to_Pinyin?"
     # more...
 )
 interrupt() {
@@ -126,7 +126,9 @@ echo -e "APPID: "${g_color}$appid${e_color}
 response="y"
 if [ ! $email = "akindleear@gmail.com" -o ! $appid = "kindleear" ]; then
     echo -e $divid_2
-    echo -n -e "${y_color}Do you want to re-modify the configuration of the APP?[y/N]${e_color} "
+    echo -n -e "${y_color}
+    
+    you want to re-modify the configuration of the APP?[y/N]${e_color} "
     read -r response
 fi
 
