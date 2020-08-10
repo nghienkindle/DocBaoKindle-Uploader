@@ -6,5 +6,5 @@ Open Google Cloud Shell, copy and paste the following commands, and enter inform
 rm -f uploader.sh* && \
 wget https://raw.githubusercontent.com/nghienkindle/DocBaoKindle-Uploader/master/uploader.sh && \
 chmod +x uploader.sh && \
-./uploader.sh https://github.com/nghienkindle/DocBaoKindle.git
+./uploader.sh https://github.com/nghienkindle/BaoKindle.git
 ```
